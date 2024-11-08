@@ -16,7 +16,7 @@ function App() {
       <Header todos={todos} />
       <Tabs todos={todos} />
       <TodoInput todos={todos} />
-      <TodoList />
+      <TodoList todos={todos}/>
     </>
   )
 }
