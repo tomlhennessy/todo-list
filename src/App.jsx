@@ -3,7 +3,7 @@ import { Tabs } from "./components/Tabs"
 import { TodoInput } from "./components/TodoInput"
 import { TodoList } from "./components/TodoList"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function App() {
   const [todos, setTodos] = useState([
@@ -14,6 +14,7 @@ function App() {
   function handleAddTodo(newTodo) {
     const newTodoList = [...todos, {input: newTodo, complete: false}]
     setTodos(newTodoList)
+    handleSaveData(newTodoList)
   }
 
   function handleCompleteTodo(index) {
@@ -23,6 +24,7 @@ function App() {
     completedTodo['complete'] = true
     newTodoList[index] = completedTodo
     setTodos(newTodoList)
+    handleSaveData(newTodoList)
   }
 
   function handleDeleteTodo(index) {
@@ -30,7 +32,21 @@ function App() {
       return valIndex !== index
     })
     setTodos(newTodoList)
+    handleSaveData(newTodoList)
   }
+
+  function handleSaveData(currTodos) {
+    localStorage.setItem('todo-app', JSON.stringify({ todos: currTodos }))
+  }
+
+  useEffect(() => {
+    if (!localStorage || !localStorage.getItem('todo-app')) {return}
+    let db = []
+    if (localStorage.getItem('todo-app')) {
+      db = JSON.parse(localStorage.getItem('todo-app'))
+      setTodos(db.todos)
+    }
+  }, [])
 
   return (
     <>
